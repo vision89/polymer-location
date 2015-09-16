@@ -22,7 +22,7 @@ An element that allows you to declaratively access the GeoLocation api.
 ##### coords
 User's coordinates property.
     
-    <polymer-location coords="{{coords}}"></polymer-location>
+  ex: <polymer-location coords="{{coords}}"></polymer-location>
     Object
     default: {"latitude": 0, "longitude": 0, "accuracy": 0, "altitude": null, "altitudeAccuracy": null, "heading": null, "speed": null}
     readOnly
