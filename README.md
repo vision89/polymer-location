@@ -21,12 +21,13 @@ An element that allows you to declaratively access the GeoLocation api.
     
 ##### coords
 User's coordinates property.
-ex: <polymer-location coords="{{coords}}"></polymer-location>
-Object
-default: {"latitude": 0, "longitude": 0, "accuracy": 0, "altitude": null, "altitudeAccuracy": null, "heading": null, "speed": null}
-readOnly
-notify
-reflectToAttribute
+    
+    <polymer-location coords="{{coords}}"></polymer-location>
+    Object
+    default: {"latitude": 0, "longitude": 0, "accuracy": 0, "altitude": null, "altitudeAccuracy": null, "heading": null, "speed": null}
+    readOnly
+    notify
+    reflectToAttribute
 
 #### getLocation
 Get's the users location once.  If you only need to get the location at page load there's no reason to send a 
