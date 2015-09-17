@@ -199,6 +199,14 @@ Example:
         if ( this.positionWatcher !== undefined ) {
         
           navigator.geolocation.clearWatch( this.positionWatcher );
+
+          this.set( 'coords.latitude', 0 );
+          this.set( 'coords.longitude', 0 );
+          this.set( 'coords.accuracy', 0 );
+          this.set( 'coords.altitude', null );
+          this.set( 'coords.altitudeAccuracy', null );
+          this.set( 'coords.heading', null );
+          this.set( 'coords.speed', null );
           
         }
         
