@@ -1,0 +1,241 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+An element that allows you to declaratively access the GeoLocation api
+
+Examples:
+
+    <polymer-location id="get-location" coords="{{coords}}"></polymer-location>
+    
+    <polymer-location coords="{{coordsB}}" watch-location ></polymer-location>
+
+@group Seed Elements
+@element polymer-location
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="polymer-location">
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'polymer-location',
+
+    properties: {
+      
+      /**
+       * Users location coordinates
+       */ 
+      coords: {
+        
+        type: Object,
+        notify: true,
+        value: {
+          latitude: 0,
+          longitude: 0,
+          accuracy: 0,
+          altitude: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null
+        },
+        readOnly: true,
+        reflectToAttribute: true,
+        
+      },
+      
+      /**
+       * Set this as an attribute to watch the location on an interval
+       */ 
+      watchLocation: {
+        
+        type: Boolean,
+        notify: false,
+        value: true,
+        observer: '_watchLocation'
+        
+      },
+      
+      /**
+       * Sets the accuracy
+       */ 
+      highAccuracy: {
+        
+        type: Boolean,
+        notify: false,
+        value: false
+        
+      },
+      
+      /**
+       * Sets the timeout before it goes to cache
+       */ 
+      timeout: {
+        
+        type: Number,
+        notify: false,
+        value: 5000
+        
+      },
+      
+      /**
+       * Sets the maximum age of the locations in cache
+       */ 
+      maximumAge: {
+        
+        type: Number,
+        notify: false,
+        value: 0
+        
+      }
+
+    },
+    
+    /**
+     * Get the users location once
+     */ 
+    getLocation: function () {
+      
+      if ( this.getLocation === true ) {
+        
+        //Make sure the browser supports geolocation
+        if ( navigator.geolocation ) {
+          
+          //Get the location
+          navigator.geolocation.getCurrentPosition( function ( position ) {
+            
+            this.set( 'coords.latitude', position.coords.latitude );
+            this.set( 'coords.longitude', position.coords.longitude );
+            this.set( 'coords.accuracy', position.coords.accuracy );
+            this.set( 'coords.altitude', position.coords.altitude );
+            this.set( 'coords.altitudeAccuracy', position.coords.altitudeAccuracy );
+            this.set( 'coords.heading', position.coords.heading );
+            this.set( 'coords.speed', position.coords.speed );
+            
+          //If we err send a notification
+          }.bind( this ), function ( e ) {
+            
+            this.fire( 'geolocation-error', { error: 'ERROR(' + e.code + '): ' + e.message } );
+            
+          }.bind( this ));
+          
+        } else {
+          
+          //Geolocation is not supported
+          this.fire( 'geolocation-error', { error: 'Geolocation not supported' } );
+          
+        }
+        
+      }
+      
+    },
+    
+    /**
+     * Watch the users location
+     */ 
+    _watchLocation: function () {
+      
+      if ( this.watchLocation === true ) {
+        
+        //Make sure the browser supports geolocation
+        if ( navigator.geolocation ) {
+          
+          this.positionWatcher = navigator.geolocation.watchPosition( function ( position ) {
+            
+            this.set( 'coords.latitude', position.coords.latitude );
+            this.set( 'coords.longitude', position.coords.longitude );
+            this.set( 'coords.accuracy', position.coords.accuracy );
+            this.set( 'coords.altitude', position.coords.altitude );
+            this.set( 'coords.altitudeAccuracy', position.coords.altitudeAccuracy );
+            this.set( 'coords.heading', position.coords.heading );
+            this.set( 'coords.speed', position.coords.speed );
+          
+          //If we err send a notification
+          }.bind( this ), function ( e ) {
+            
+            this.fire( 'geolocation-error', { error: 'ERROR(' + e.code + '): ' + e.message } );
+            
+          }.bind( this ), {
+             
+             'enableHighAccuracy': this.highAccuracy,
+             'timeout': this.timeout,
+             'maximumAge': this.maximumAge
+              
+          });
+          
+        } else {
+          
+          //If we err send a notification
+          this.fire( 'geolocation-error', { error: 'Geolocation not supported' } );
+          
+        }
+        
+      }
+      
+    },
+    
+    /**
+     * Turn off the position watcher
+     */ 
+    unsetWatch: function () {
+      
+      if ( this.positionWatcher !== undefined ) {
+        
+          navigator.geolocation.clearWatch( this.positionWatcher );
+
+          this.set( 'coords.latitude', 0 );
+          this.set( 'coords.longitude', 0 );
+          this.set( 'coords.accuracy', 0 );
+          this.set( 'coords.altitude', null );
+          this.set( 'coords.altitudeAccuracy', null );
+          this.set( 'coords.heading', null );
+          this.set( 'coords.speed', null );
+          
+        }
+      
+    },
+
+
+    // Element Lifecycle
+
+    ready: function() {
+      // `ready` is called after all elements have been configured, but
+      // propagates bottom-up. This element's children are ready, but parents
+      // are not.
+      //
+      // This is the point where you should make modifications to the DOM (when
+      // necessary), or kick off any processes the element wants to perform.
+    },
+
+    attached: function() {
+      // `attached` fires once the element and its parents have been inserted
+      // into a document.
+      //
+      // This is a good place to perform any work related to your element's
+      // visual state or active behavior (measuring sizes, beginning animations,
+      // loading resources, etc).
+    },
+
+    detached: function() {
+      // The analog to `attached`, `detached` fires when the element has been
+      // removed from a document.
+      //
+      // Use this to clean up anything you did in `attached
+      this.unsetWatch();
+      
+    }
+
+  });
+
+</script>
