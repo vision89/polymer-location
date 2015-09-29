@@ -1,7 +1,5 @@
 # polymer-location
 
-## This element is still in beta.  It has not yet been thoroughly tested, breaking changes are possible.
-
 An element that allows you to declaratively access the GeoLocation api.
 
 ## How to install
