@@ -1,12 +1,13 @@
 {
   "name": "polymer-location",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
     "Dustin Gulley dlgulley411@gmail.com"
   ],
   "description": "An element that provides a declarative way to access the GeoLocation api",
   "keywords": [
-    "location"
+    "location",
+    "web-components"
   ],
   "main": "polymer-location.html",
   "license": "http://polymer.github.io/LICENSE.txt",
