@@ -22,7 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-bind" id="app">
       
-      <polymer-location coords="{{coords}}" get-location ></polymer-location>
+      <polymer-location id="get-location" coords="{{coords}}"></polymer-location>
       
       <div>
         
@@ -80,11 +80,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         
       </div>
       
-      <polymer-location coords="{{coordsB}}" set-location ></polymer-location>
+      <polymer-location coords="{{coordsB}}" watch-location ></polymer-location>
       
       <div>
         
-        Set Location
+        Watch Location
         
       </div>
       
@@ -145,6 +145,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ( function ( document ) {
         
         var app = document.querySelector('#app');
+        
+        var getLocation = document.querySelector( '#get-location' );
+        
+        getLocation.getLocation();
         
       })( document );
       

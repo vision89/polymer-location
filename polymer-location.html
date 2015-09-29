@@ -12,9 +12,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--
 An element that allows you to declaratively access the GeoLocation api
 
-Example:
+Examples:
 
-    <polymer-location></polymer-location>
+    <polymer-location id="get-location" coords="{{coords}}"></polymer-location>
+    
+    <polymer-location coords="{{coordsB}}" watch-location ></polymer-location>
 
 @group Seed Elements
 @element polymer-location
@@ -53,15 +55,9 @@ Example:
         
       },
       
-      getLocation: {
-        
-        type: Boolean,
-        notify: false,
-        value: true,
-        observer: '_getLocation'
-        
-      },
-      
+      /**
+       * Set this as an attribute to watch the location on an interval
+       */ 
       watchLocation: {
         
         type: Boolean,
@@ -71,15 +67,9 @@ Example:
         
       },
       
-      unsetWatch: {
-        
-        type: Boolean,
-        notify: false,
-        value: false,
-        observer: '_unsetWatch'
-        
-      },
-      
+      /**
+       * Sets the accuracy
+       */ 
       highAccuracy: {
         
         type: Boolean,
@@ -88,6 +78,9 @@ Example:
         
       },
       
+      /**
+       * Sets the timeout before it goes to cache
+       */ 
       timeout: {
         
         type: Number,
@@ -96,6 +89,9 @@ Example:
         
       },
       
+      /**
+       * Sets the maximum age of the locations in cache
+       */ 
       maximumAge: {
         
         type: Number,
@@ -109,7 +105,7 @@ Example:
     /**
      * Get the users location once
      */ 
-    _getLocation: function () {
+    getLocation: function () {
       
       if ( this.getLocation === true ) {
         
@@ -192,11 +188,9 @@ Example:
     /**
      * Turn off the position watcher
      */ 
-    _unsetWatch: function () {
+    unsetWatch: function () {
       
-      if ( this.unsetWatch === true ) {
-        
-        if ( this.positionWatcher !== undefined ) {
+      if ( this.positionWatcher !== undefined ) {
         
           navigator.geolocation.clearWatch( this.positionWatcher );
 
@@ -209,8 +203,6 @@ Example:
           this.set( 'coords.speed', null );
           
         }
-        
-      }
       
     },
 
@@ -240,7 +232,7 @@ Example:
       // removed from a document.
       //
       // Use this to clean up anything you did in `attached
-      this.unsetWatch = true;
+      this.unsetWatch();
       
     }
 
